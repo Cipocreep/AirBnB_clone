@@ -38,8 +38,8 @@ class BaseModel:
 
     def to_dict(self):
         """ Returns a dictionary containing __dict__"""
-        dic = dict(self.__dict__)
-        dic['__class__'] = self.__class__.__name__
-        dic['updated_at'] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        dic['created_at'] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        return dic
+        dictionary = dict(self.__dict__)
+        dictionary['__class__'] = self.__class__.__name__
+        dictionary['updated_at'] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        dictionary['created_at'] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        return dictionary
