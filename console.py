@@ -143,19 +143,6 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
                 return
 
-        else:
-            key = args[0] + '.' + args[1]
-            try:
-                if '.' in args[3]:
-                    value = float(args[3])
-                else:
-                    value = int(args[3])
-            except ValueError:
-                value = str(args[3]).strip("\"':")
-                value = str(value)
-            setattr(storage.all()[key], args[2].strip("\"':"), value)
-            storage.save()
-
     def count(self, arg):
         """ Returns the total quantity of instances of the Class"""
         count = 0
