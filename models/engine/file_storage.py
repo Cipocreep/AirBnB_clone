@@ -54,12 +54,8 @@ class FileStorage:
 
     @classmethod
     def get_object(cls, id=''):
-        '''Returns an object based on id
-        Return:
-        returns an object that matches id or prints an error on failure
-        '''
+        """ Test for getting object """
         objects = cls.__objects
         for obj in objects.values():
             if obj.id == id:
                 return obj
-        print("id could not be matched")

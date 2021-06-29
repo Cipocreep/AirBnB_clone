@@ -163,11 +163,14 @@ class HBNBCommand(cmd.Cmd):
                     count += 1
             print(count)
 
-    def dict_update(self, arg):
-        """ Updates for dicts"""
+    def dict_update(self, arg, class_name):
+        """ Updates for dicts """
         args = arg.split(",", 1)
         obj = storage.get_object(args[0].strip("'\""))
         dicti = ast.literal_eval(args[1].strip())
+        if obj is None or obj.__class__.__name__ != class_name:
+                print("** no instance found **")
+                return
         for attr in dicti:
             setattr(obj, attr, dicti[attr])
 
@@ -193,13 +196,13 @@ class HBNBCommand(cmd.Cmd):
             elif func_name == "update":
                 method_name = args[1].split("(")
                 method_name[1] = method_name[1].strip()
-                args = method_name[1][:-1]
-                argsplit = args.split(",", 1)
+                method_splitted = method_name[1][:-1]
+                argsplit = method_splitted.split(",", 1)
                 if argsplit[1].strip()[0] == "{":
-                    return self.dict_update(args)
+                    return self.dict_update(method_splitted, args[0])
                 else:
                     args = args.split(",", 2)
-                    return self.do_update(" ".join([func_name] + args))
+                    return self.do_update(" ".join([args[0]] + method_splitted))
             else:
                 print("*** Unknown syntax: {}".format(arg))
         except Exception:
