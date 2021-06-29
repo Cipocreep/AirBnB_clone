@@ -156,7 +156,7 @@ class HBNBCommand(cmd.Cmd):
         """ Attempts to parse unfound command """
         funcs = {"all": HBNBCommand.do_all, "count": HBNBCommand.count}
         other_funcs = {"show": HBNBCommand.do_show,
-                                "destroy": HBNBCommand.do_destroy}
+                       "destroy": HBNBCommand.do_destroy}
         try:
             args = arg.split(".")
             func_name = ""
@@ -185,7 +185,7 @@ class HBNBCommand(cmd.Cmd):
                 HBNBCommand.do_update(self, arg)
             else:
                 print("*** Unknown syntax: {}".format(arg))
-        except:
+        except Exception:
             print("*** Unknown syntax: {}".format(arg))
 
 
