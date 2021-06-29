@@ -126,8 +126,15 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 1:
             print("** instance id missing **")
             return
+
         key = args[0] + '.' + args[1]
         if key in storage.all():
+            if len(arg) == 2:
+                print("** attribute name missing **")
+                return
+            elif len(arg) == 3:
+                print("** value missing **")
+                return
             try:
                 if '.' in args[3]:
                     value = float(args[3])
