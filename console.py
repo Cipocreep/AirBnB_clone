@@ -30,7 +30,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def emptyline(self):
-        """ Does nohting """
+        """ Does nothing """
         pass
 
     def do_create(self, arg):
@@ -108,8 +108,8 @@ class HBNBCommand(cmd.Cmd):
         for key, value in storage.all().items():
             if str(key.split(".")[0]) == args[0]:
                 list_inst.append(str(value))
-            if len(list_inst) != 0:
-                print(list_inst)
+        if len(list_inst) != 0:
+            print(list_inst)
 
     def do_update(self, arg):
         """ Updates an instance based on the class name and id """
@@ -141,6 +141,52 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
                 return
+
+    def count(self, arg):
+        """ Returns the total quantity of instances of the Class"""
+        count = 0
+        args = arg.split()
+        if eval(args[0]):
+            for key in storage.all():
+                if arg in key:
+                    count += 1
+            print(count)
+
+    def default(self, arg):
+        """ Attempts to parse unfound command """
+        funcs = {"all": HBNBCommand.do_all, "count": HBNBCommand.count}
+        other_funcs = {"show": HBNBCommand.do_show,
+                                "destroy": HBNBCommand.do_destroy}
+        try:
+            args = arg.split(".")
+            func_name = ""
+            func_id = ""
+            for index, char in enumerate(args[1]):
+                if char == "(":
+                    func_name = args[1][0:index]
+                    break
+
+            if func_name in funcs:
+                funcs[func_name](self, args[0])
+            elif func_name in other_funcs:
+                arg = args[0] + " " + args[1][index + 2:-2]
+                other_funcs[func_name](self, arg)
+            elif func_name == "update":
+                parse = ""
+                arg = args[1][index + 1:-1]
+                for char in arg:
+                    if char != '"' and char != "'":
+                        parse += char
+                parse = parse.split(",")
+                arg = args[0] + " "
+                for thing in parse:
+                    thing.strip(" ")
+                    arg += thing + " "
+                HBNBCommand.do_update(self, arg)
+            else:
+                print("*** Unknown syntax: {}".format(arg))
+        except:
+            print("*** Unknown syntax: {}".format(arg))
 
 
 if __name__ == '__main__':
