@@ -5,6 +5,7 @@ Module containing the console for our AirBnb Clone
 import cmd
 import models
 import inspect
+import ast
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -126,22 +127,31 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 1:
             print("** instance id missing **")
             return
+
+        key = args[0] + '.' + args[1]
+        try:
+            storage.all()[key]
+        except Exception:
+            print("** no instance found **")
+            return
+
+        if len(args) == 2:
+            print("** attribute name missing **")
+            return
+        elif len(args) == 3:
+            print("** value missing **")
+            return
         else:
-            key = args[0] + "." + args[1]
-            if key in storage.all():
-                if len(args) == 2:
-                    print("** attribute name missing **")
-                    return
-                elif len(args) == 3:
-                    print("** value missing **")
-                    return
+            try:
+                if '.' in args[3]:
+                    value = float(args[3])
                 else:
-                    storage.all()[key].__dict__[args[2]] = args[3]
-                    storage.all()[key].save
-                    storage.reload()
-            else:
-                print("** no instance found **")
-                return
+                    value = int(args[3])
+            except ValueError:
+                value = str(args[3]).strip("\"':")
+                value = str(value)
+            setattr(storage.all()[key], args[2].strip("\"':"), value)
+            storage.save()
 
     def count(self, arg):
         """ Returns the total quantity of instances of the Class"""
@@ -152,6 +162,14 @@ class HBNBCommand(cmd.Cmd):
                 if arg in key:
                     count += 1
             print(count)
+
+    def dict_update(self, arg):
+        """ Updates for dicts"""
+        args = arg.split(",", 1)
+        obj = storage.get_object(args[0].strip("'\""))
+        dicti = ast.literal_eval(args[1].strip())
+        for attr in dicty:
+            setattr(obj, attr, dicti[attr])
 
     def default(self, arg):
         """ Attempts to parse unfound command """
@@ -173,22 +191,19 @@ class HBNBCommand(cmd.Cmd):
                 arg = args[0] + " " + args[1][index + 2:-2]
                 other_funcs[func_name](self, arg)
             elif func_name == "update":
-                parse = ""
-                arg = args[1][index + 1:-1]
-                for char in arg:
-                    if char != '"' and char != "'":
-                        parse += char
-                parse = parse.split(",")
-                arg = args[0] + " "
-                for thing in parse:
-                    thing.strip(" ")
-                    arg += thing + " "
-                HBNBCommand.do_update(self, arg)
+                method_name = args[1].split("(")
+                method_name[1] = method_name[1].strip()
+                args = method_name[1][:-1]
+                argsplit = args.split(",", 1)
+                if argsplit[1].strip()[0] == "{":
+                    return self.dict_update(args)
+                else:
+                    args = args.split(",", 2)
+                    return self.do_update(" ".join([func_name] + args))
             else:
                 print("*** Unknown syntax: {}".format(arg))
         except Exception:
             print("*** Unknown syntax: {}".format(arg))
-
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
