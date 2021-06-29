@@ -138,6 +138,7 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     storage.all()[key].__dict__[args[2]] = args[3]
                     storage.all()[key].save
+                    storage.reload()
             else:
                 print("** no instance found **")
                 return
