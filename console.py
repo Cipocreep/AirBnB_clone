@@ -126,22 +126,21 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 1:
             print("** instance id missing **")
             return
-        else:
-            key = args[0] + "." + args[1]
-            if key in storage.all():
-                if len(arg) == 2:
-                    print("** attribute name missing **")
-                    return
-                elif len(arg) == 3:
-                    print("** value missing **")
-                    return
+        key = args[0] + '.' + args[1]
+        if key in storage.all():
+            try:
+                if '.' in args[3]:
+                    value = float(args[3])
                 else:
-                    storage.all()[key].__dict__[args[2]] = args[3]
-                    storage.all()[key].save
-                    storage.reload()
-            else:
-                print("** no instance found **")
-                return
+                    value = int(args[3])
+            except ValueError:
+                value = str(args[3]).strip("\"':")
+                value = str(value)
+            setattr(storage.all()[key], args[2].strip("\"':"), value)
+            storage.save()
+        else:
+            print("** no instance found **")
+            return
 
     def count(self, arg):
         """ Returns the total quantity of instances of the Class"""
