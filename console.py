@@ -168,7 +168,7 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split(",", 1)
         obj = storage.get_object(args[0].strip("'\""))
         dicti = ast.literal_eval(args[1].strip())
-        for attr in dicty:
+        for attr in dicti:
             setattr(obj, attr, dicti[attr])
 
     def default(self, arg):
