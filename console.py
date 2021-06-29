@@ -130,12 +130,17 @@ class HBNBCommand(cmd.Cmd):
         key = args[0] + '.' + args[1]
         try:
             storage.all()[key]
-            if len(arg) == 2:
-                print("** attribute name missing **")
-                return
-            elif len(arg) == 3:
-                print("** value missing **")
-                return
+        except Exception:
+            print("** no instance found **")
+            return
+
+        if len(arg) == 2:
+            print("** attribute name missing **")
+            return
+        elif len(arg) == 3:
+            print("** value missing **")
+            return
+        else:
             try:
                 if '.' in args[3]:
                     value = float(args[3])
@@ -146,9 +151,6 @@ class HBNBCommand(cmd.Cmd):
                 value = str(value)
             setattr(storage.all()[key], args[2].strip("\"':"), value)
             storage.save()
-        except Exception:
-            print("** no instance found **")
-            return
 
     def count(self, arg):
         """ Returns the total quantity of instances of the Class"""
