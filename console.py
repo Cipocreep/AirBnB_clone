@@ -169,8 +169,8 @@ class HBNBCommand(cmd.Cmd):
         obj = storage.get_object(args[0].strip("'\""))
         dicti = ast.literal_eval(args[1].strip())
         if obj is None or obj.__class__.__name__ != class_name:
-                print("** no instance found **")
-                return
+            print("** no instance found **")
+            return
         for attr in dicti:
             setattr(obj, attr, dicti[attr])
 
@@ -202,11 +202,13 @@ class HBNBCommand(cmd.Cmd):
                     return self.dict_update(method_splitted, args[0])
                 else:
                     args = args.split(",", 2)
-                    return self.do_update(" ".join([args[0]] + method_splitted))
+                    return self.do_update(" ".join([args[0]] +
+                                                   method_splitted))
             else:
                 print("*** Unknown syntax: {}".format(arg))
         except Exception:
             print("*** Unknown syntax: {}".format(arg))
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

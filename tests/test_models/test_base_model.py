@@ -48,7 +48,7 @@ class TestsForBase(unittest.TestCase):
         """ Testing method str """
         instance = BaseModel()
         self.assertEqual(instance.__str__(), "[{}] ({}) {}".format
-                                        (instance.__class__.__name__,
-                                         instance.id, instance.__dict__))
+                         (instance.__class__.__name__,
+                         instance.id, instance.__dict__))
         self.assertTrue(type(instance.__str__()), str)
         self.assertTrue(len(instance.__str__()))
