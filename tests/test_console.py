@@ -19,7 +19,7 @@ from models.place import Place
 from models.review import Review
 from models.user import User
 from models.engine.file_storage import FileStorage
-from test.support import captured_stdout, captured_stderr
+
 
 class TestConsole(unittest.TestCase):
     """
@@ -158,20 +158,24 @@ class TestConsole(unittest.TestCase):
                 HBNBCommand().onecmd('{}.show("{}")'.format(k, obj.id))
                 self.assertEqual(str(obj) + '\n', out.getvalue())
 
+    def test_update(self):
+        """ Test BaseModel """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("create BaseModel")
+            id = f.getvalue().strip()
+            self.assertTrue(type(f), str)
+            self.assertEqual(len(id), 36)
 
-    def create(self, server=None):
-        """create method is a helper function for test class"""
-        return HBNBCommand(stdin=self.mock_stdin, stdout=self.mock_stdout)
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("BaseModel.update('" + str(id) + "', 'name', 'John')")
+            self.assertTrue(type(f), str)
+            self.assertEqual(f.getvalue().strip(), "")
 
-    def test_update_error(self):
-        """test method for do_update method errors"""
-        cli = self.create()
-        with captured_stdout() as stdout, captured_stderr() as stderr:
-            self.assertFalse(cli.onecmd("update"))
-            self.assertEqual("** class name missing **\n", stdout.getvalue())
-        with captured_stdout() as stdout, captured_stderr() as stderr:
-            self.assertFalse(cli.onecmd("update News"))
-            self.assertEqual("** class doesn't exist **\n", stdout.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("show BaseModel " + str(id))
+            self.assertTrue("name" in f.getvalue().strip())
+            self.assertTrue("John" in f.getvalue().strip())
+
 
 if __name__ == '__main__':
     unittest.main()

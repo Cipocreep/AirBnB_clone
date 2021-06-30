@@ -179,34 +179,32 @@ class HBNBCommand(cmd.Cmd):
         funcs = {"all": HBNBCommand.do_all, "count": HBNBCommand.count}
         other_funcs = {"show": HBNBCommand.do_show,
                        "destroy": HBNBCommand.do_destroy}
-        try:
-            args = arg.split(".")
-            func_name = ""
-            func_id = ""
-            for index, char in enumerate(args[1]):
-                if char == "(":
-                    func_name = args[1][0:index]
-                    break
+        args = arg.split(".")
+        func_name = ""
+        func_id = ""
+        for index, char in enumerate(args[1]):
+            if char == "(":
+                func_name = args[1][0:index]
+                break
 
-            if func_name in funcs:
-                funcs[func_name](self, args[0])
-            elif func_name in other_funcs:
-                arg = args[0] + " " + args[1][index + 2:-2]
-                other_funcs[func_name](self, arg)
-            elif func_name == "update":
-                method_name = args[1].split("(")
-                method_name[1] = method_name[1].strip()
-                method_splitted = method_name[1][:-1]
-                argsplit = method_splitted.split(",", 1)
-                if argsplit[1].strip()[0] == "{":
-                    return self.dict_update(method_splitted, args[0])
-                else:
-                    args = args.split(",", 2)
-                    return self.do_update(" ".join([args[0]] +
-                                                   method_splitted))
+        if func_name in funcs:
+            funcs[func_name](self, args[0])
+        elif func_name in other_funcs:
+            arg = args[0] + " " + args[1][index + 2:-2]
+            other_funcs[func_name](self, arg)
+        elif func_name == "update":
+            method_name = args[1].split("(")
+            method_name[1] = method_name[1].strip()
+            method_splitted = method_name[1][:-1]
+            argsplit = method_splitted.split(",", 1)
+            if argsplit[1].strip()[0] == "{":
+                return self.dict_update(method_splitted, args[0])
             else:
-                print("*** Unknown syntax: {}".format(arg))
-        except Exception:
+                method_splitted = method_splitted.split(",")
+                stripped_string = " ".join([args[0]] +
+                                           method_splitted).replace('"', "")
+                return self.do_update(stripped_string)
+        else:
             print("*** Unknown syntax: {}".format(arg))
 
 
