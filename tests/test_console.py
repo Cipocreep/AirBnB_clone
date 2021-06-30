@@ -19,7 +19,7 @@ from models.place import Place
 from models.review import Review
 from models.user import User
 from models.engine.file_storage import FileStorage
-
+from test.support import captured_stdout, captured_stderr
 
 class TestConsole(unittest.TestCase):
     """
@@ -108,42 +108,7 @@ class TestConsole(unittest.TestCase):
                 HBNBCommand().onecmd("show {} {}".format(cls, obj.id))
                 self.assertEqual("** no instance found **\n", out.getvalue())
 
-    def testUpdate(self):
-        """
-        checks if update command is valid.
-        validates all method error messages
-        """
-        """
-        my_console = self.session()
-        with patch('sys.stdout', new=StringIO()) as out:
-            self.assertFalse(my_console.onecmd("update"))
-            self.assertEqual(out.getvalue(), "** class name missing **\n")
-        with patch('sys.stdout', new=StringIO()) as out:
-            self.assertFalse(my_console.onecmd("update Jared"))
-            self.assertEqual(out.getvalue(), "** class doesn't exist **\n")
-        with patch('sys.stdout', new=StringIO()) as out:
-            self.assertFalse(my_console.onecmd("update BaseModel"))
-            self.assertEqual(out.getvalue(), "** instance id missing **\n")
-        with patch('sys.stdout', new=StringIO()) as out:
-            self.assertFalse(my_console.onecmd("update BaseModel 4444-"))
-            self.assertEqual(out.getvalue(), "** no instance found **\n")
-        for cls in classes.keys():
-            obj = classes[cls]()
-            key = ".".join([cls, obj.id])
-            storage.all()[key] = obj
-            with patch('sys.stdout', new=StringIO()) as out:
-                cmnd = '{}.update("{}", "password", "too short")'
-                HBNBCommand().onecmd(cmnd.format(cls, obj.id))
-                self.assertTrue('password' in obj.__dict__)
-                if 'password' in obj.__dict__:
-                    self.assertEqual('too short', obj.__dict__['password'])
-            with patch('sys.stdout', new=StringIO()) as out:
-                cmnd = '{}.update("{}", "password", "1234")'
-                HBNBCommand().onecmd(cmnd.format(cls, obj.id))
-                self.assertTrue('password' in obj.__dict__)
-                if 'password' in obj.__dict__:
-                    self.assertEqual('1234', obj.__dict__['password'])
-    """
+
 
     def testCount(self):
         """
@@ -169,7 +134,7 @@ class TestConsole(unittest.TestCase):
                 res.append(str(val))
         return res
 
-    def test_all_obj(self):
+    def test_all(self):
         """
             <class name>.all()
         """
@@ -193,6 +158,20 @@ class TestConsole(unittest.TestCase):
                 HBNBCommand().onecmd('{}.show("{}")'.format(k, obj.id))
                 self.assertEqual(str(obj) + '\n', out.getvalue())
 
+
+    def create(self, server=None):
+        """create method is a helper function for test class"""
+        return HBNBCommand(stdin=self.mock_stdin, stdout=self.mock_stdout)
+
+    def test_update_error(self):
+        """test method for do_update method errors"""
+        cli = self.create()
+        with captured_stdout() as stdout, captured_stderr() as stderr:
+            self.assertFalse(cli.onecmd("update"))
+            self.assertEqual("** class name missing **\n", stdout.getvalue())
+        with captured_stdout() as stdout, captured_stderr() as stderr:
+            self.assertFalse(cli.onecmd("update News"))
+            self.assertEqual("** class doesn't exist **\n", stdout.getvalue())
 
 if __name__ == '__main__':
     unittest.main()
