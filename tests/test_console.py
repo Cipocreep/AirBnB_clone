@@ -22,15 +22,10 @@ from models.engine.file_storage import FileStorage
 
 
 class TestConsole(unittest.TestCase):
-    """
-    test console code with unit testing
-    """
+    """ Class for our console tests """
 
     def setUp(self):
-        """
-        Sets ups the Test console Unittest by catching in/output
-        with a mock object
-        """
+        """  Setting up for our tests """
         self.mock_stdin = create_autospec(sys.stdin)
         self.mock_stdout = create_autospec(sys.stdout)
 
@@ -41,7 +36,7 @@ class TestConsole(unittest.TestCase):
         return HBNBCommand(stdin=self.mock_stdin, stdout=self.mock_stdout)
 
     def test_basemodel(self):
-        """ Test BaseModel """
+        """ Testing BaseModel """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create BaseModel")
             id = f.getvalue().strip()
@@ -59,7 +54,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("Banu" in f.getvalue().strip())
 
     def test_user2(self):
-        """ Test user """
+        """ Testing user """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create User")
             id = f.getvalue().strip()
@@ -77,7 +72,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("Banu" in f.getvalue().strip())
 
     def test_state2(self):
-        """ Test user """
+        """ Testing state """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create State")
             id = f.getvalue().strip()
@@ -95,7 +90,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("Banu" in f.getvalue().strip())
 
     def test_city2(self):
-        """ Test city """
+        """ Testing city """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create City")
             id = f.getvalue().strip()
@@ -113,7 +108,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("Banu" in f.getvalue().strip())
 
     def test_amenity2(self):
-        """ Test amenity """
+        """ Testing amenity """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create Amenity")
             id = f.getvalue().strip()
@@ -131,7 +126,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("Banu" in f.getvalue().strip())
 
     def test_place2(self):
-        """ Test place """
+        """ Testing place """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create Place")
             id = f.getvalue().strip()
@@ -149,7 +144,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("Banu" in f.getvalue().strip())
 
     def test_review2(self):
-        """ Test review """
+        """ Testing review """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create Review")
             id = f.getvalue().strip()
@@ -167,7 +162,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("Banu" in f.getvalue().strip())
 
     def test_create2(self):
-        """ Test create """
+        """ Testing create """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create")
             self.assertEqual(f.getvalue().strip(),
@@ -185,7 +180,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(len(id), 36)
 
     def test_show2(self):
-        """ Test show """
+        """ Testing show """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create BaseModel")
             id = f.getvalue().strip()
@@ -216,7 +211,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("id" in f.getvalue().strip())
 
     def test_destroy2(self):
-        """ Test destroy """
+        """ Testing destroy """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("destroy")
             self.assertEqual(f.getvalue().strip(),
@@ -241,7 +236,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(f.getvalue().strip(), "")
 
     def test_all2(self):
-        """ Test all """
+        """ Testing all """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create User")
 
@@ -273,7 +268,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("id" in f.getvalue().strip())
 
     def test_update2(self):
-        """ Test update """
+        """ Testing update """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create User")
             id = f.getvalue().strip()
@@ -315,7 +310,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("Banu" in f.getvalue().strip())
 
     def test_newline_space2(self):
-        """ Test newline and spaces input """
+        """ Testing newline and spaces input """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("\n")
             self.assertTrue(type(f), str)
@@ -331,14 +326,12 @@ class TestConsole(unittest.TestCase):
         assert HBNBCommand(my_console.onecmd("quit"))
 
     def testEOF(self):
-        """
-        checks if EOF command is valid
-        """
+        """ Testing EOF """
         my_console = self.session()
         assert HBNBCommand().onecmd("EOF")
 
     def test_all(self):
-        """ Test all """
+        """ Testing all """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create User")
 
@@ -370,9 +363,7 @@ class TestConsole(unittest.TestCase):
             self.assertTrue("id" in f.getvalue().strip())
 
     def test_create(self):
-        """
-        Test that create throws proper errors + works w all classes
-        """
+        """ Testing create """
         with patch('sys.stdout', new=StringIO()) as out:
             self.assertFalse(HBNBCommand().onecmd("create asgshsd"))
             self.assertEqual(out.getvalue(), "** class doesn't exist **\n")
@@ -385,10 +376,7 @@ class TestConsole(unittest.TestCase):
                 self.assertTrue(len(str(out.getvalue())) == 37)
 
     def testDestroy(self):
-        """
-        tests existence of destroy method and validates
-        error messages
-        """
+        """ testing destroy """
         my_console = self.session()
         with patch('sys.stdout', new=StringIO()) as out:
             self.assertFalse(my_console.onecmd("destroy"))
@@ -426,9 +414,7 @@ class TestConsole(unittest.TestCase):
 
 
     def testCount(self):
-        """
-        test that count command returns appropriate val
-        """
+        """ Test count """
         for k in classes.keys():
             count = 0
             for c in storage.all():
@@ -440,9 +426,7 @@ class TestConsole(unittest.TestCase):
 
     @staticmethod
     def get_all_obj_by_classname(class_name):
-        """
-        :return all object found in storage
-        """
+        """ Statiuc method """
         res = []
         for key, val in storage.all().items():
             if type(val) is eval(class_name):
@@ -450,9 +434,7 @@ class TestConsole(unittest.TestCase):
         return res
 
     def test_all(self):
-        """
-            <class name>.all()
-        """
+        """ testing all """
         for class_name in classes:
             with patch('sys.stdout', new=StringIO()) as f:
                 all_class_name = self.get_all_obj_by_classname(class_name)
@@ -460,9 +442,7 @@ class TestConsole(unittest.TestCase):
                 self.assertEqual(all_class_name, eval(f.getvalue()))
 
     def testShow(self):
-        """
-        test that validates show command
-        """
+        """ testing show """
         for k in classes.keys():
             obj = classes[k]()
             storage.all()[".".join([k, obj.id])] = obj
@@ -591,6 +571,17 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd("show Review " + str(id))
             self.assertTrue("text" in f.getvalue().strip())
             self.assertTrue("John" in f.getvalue().strip())
+
+    def test_help_console_cmd(self):
+        """ testing help command """
+        expected = """
+Documented commands (type help <topic>):
+========================================
+EOF  all  create  destroy  help  quit  show  update
+\n"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("help")
+            self.assertEqual(expected, f.getvalue())
 
 
 if __name__ == '__main__':
