@@ -27,7 +27,7 @@ class TestsForBase(unittest.TestCase):
         self.assertGreater(time_updated, time_created)
 
     def test_save_storage(self):
-        """ Tests the save method """
+        """ Testing the save method """
         m1 = BaseModel()
         m1.save()
         with open("file.json", mode="r", encoding="UTF-8") as f:

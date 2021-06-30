@@ -407,8 +407,6 @@ class TestConsole(unittest.TestCase):
                 HBNBCommand().onecmd("show {} {}".format(cls, obj.id))
                 self.assertEqual("** no instance found **\n", out.getvalue())
 
-
-
     def testCount(self):
         """ Test count """
         for k in classes.keys():
@@ -457,7 +455,8 @@ class TestConsole(unittest.TestCase):
             self.assertTrue(type(f), str)
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("BaseModel.update(\"" + str(id) + "\", \"name\", \"John\")")
+            HBNBCommand().onecmd("BaseModel.update(\"" +
+                                 str(id) + "\", \"name\", \"John\")")
             self.assertTrue(type(f), str)
             self.assertEqual(f.getvalue().strip(), "")
 
@@ -474,7 +473,8 @@ class TestConsole(unittest.TestCase):
             self.assertTrue(type(f), str)
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("User.update(\"" + str(id) + "\", \"first_name\", \"John\")")
+            HBNBCommand().onecmd("User.update(\"" +
+                                 str(id) + "\", \"first_name\", \"John\")")
             self.assertTrue(type(f), str)
             self.assertEqual(f.getvalue().strip(), "")
 
@@ -491,7 +491,8 @@ class TestConsole(unittest.TestCase):
             self.assertTrue(type(f), str)
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("State.update(\"" + str(id) + "\", \"name\", \"John\")")
+            HBNBCommand().onecmd("State.update(\"" +
+                                 str(id) + "\", \"name\", \"John\")")
             self.assertTrue(type(f), str)
             self.assertEqual(f.getvalue().strip(), "")
 
@@ -508,7 +509,8 @@ class TestConsole(unittest.TestCase):
             self.assertTrue(type(f), str)
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("City.update(\"" + str(id) + "\", \"name\", \"John\")")
+            HBNBCommand().onecmd("City.update(\"" +
+                                 str(id) + "\", \"name\", \"John\")")
             self.assertTrue(type(f), str)
             self.assertEqual(f.getvalue().strip(), "")
 
@@ -525,7 +527,8 @@ class TestConsole(unittest.TestCase):
             self.assertTrue(type(f), str)
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("Amenity.update(\"" + str(id) + "\", \"name\", \"John\")")
+            HBNBCommand().onecmd("Amenity.update(\"" +
+                                 str(id) + "\", \"name\", \"John\")")
             self.assertTrue(type(f), str)
             self.assertEqual(f.getvalue().strip(), "")
 
@@ -542,7 +545,8 @@ class TestConsole(unittest.TestCase):
             self.assertTrue(type(f), str)
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("Place.update(\"" + str(id) + "\", \"name\", \"John\")")
+            HBNBCommand().onecmd("Place.update(\"" +
+                                 str(id) + "\", \"name\", \"John\")")
             self.assertTrue(type(f), str)
             self.assertEqual(f.getvalue().strip(), "")
 
@@ -559,7 +563,8 @@ class TestConsole(unittest.TestCase):
             self.assertTrue(type(f), str)
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("Review.update(\"" + str(id) + "\", \"text\", \"John\")")
+            HBNBCommand().onecmd("Review.update(\"" +
+                                 str(id) + "\", \"text\", \"John\")")
             self.assertTrue(type(f), str)
             self.assertEqual(f.getvalue().strip(), "")
 

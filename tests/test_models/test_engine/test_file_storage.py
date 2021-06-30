@@ -18,10 +18,10 @@ from models import storage
 
 
 class TestForFileStorage(unittest.TestCase):
-    """ Test class for File"""
+    """ Test class for FileStorage """
 
     @classmethod
-    def setUpClass(cls):
+    def SetUp(cls):
         cls.rev1 = Review()
         cls.rev1.place_id = "Raleigh"
         cls.rev1.user_id = "Greg"
@@ -38,9 +38,7 @@ class TestForFileStorage(unittest.TestCase):
             pass
 
     def test_all(self):
-        """
-        Tests method: all (returns dictionary <class>.<id> : <obj instance>)
-        """
+        """ Testing .all()"""
         storage = FileStorage()
         instances_dic = storage.all()
         self.assertIsNotNone(instances_dic)
@@ -48,9 +46,7 @@ class TestForFileStorage(unittest.TestCase):
         self.assertIs(instances_dic, storage._FileStorage__objects)
 
     def test_new(self):
-        """
-        Tests method: new (saves new object into dictionary)
-        """
+        """ Testing new """
         m_storage = FileStorage()
         instances_dic = m_storage.all()
         melissa = User()
@@ -61,9 +57,7 @@ class TestForFileStorage(unittest.TestCase):
         self.assertIsNotNone(instances_dic[key])
 
     def test_reload_empty(self):
-        """
-        Tests method: reload (reloads objects from string file)
-        """
+        """ testing reload when empty"""
         a_storage = FileStorage()
         try:
             os.remove("file.json")
@@ -77,9 +71,7 @@ class TestForFileStorage(unittest.TestCase):
         self.assertIs(a_storage.reload(), None)
 
     def test_reload(self):
-        """
-        Tests method: reload (reloads objects from string file)
-        """
+        """ testing reload"""
         self.maxDiff = None
         a_storage = FileStorage()
         try:
@@ -95,7 +87,7 @@ class TestForFileStorage(unittest.TestCase):
             self.assertEqual(objs[key].to_dict(), dicts[key])
 
     def test_save(self):
-        """ json file check """
+        """ testing save """
         if os.path.isfile("file.json"):
             os.rename("file.json", "file.json.temp")
         self.brba = FileStorage()
