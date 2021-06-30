@@ -22,62 +22,56 @@ import models
 from os import path
 
 
-class FileStorageAllTest(unittest.TestCase):
-    def testAllInstance(self):
-        storage = FileStorage()
-        newDict = storage.all()
-        self.assertIsInstance(newDict, dict)
-        self.assertDictEqual(newDict, FileStorage._FileStorage__objects)
+class TestsForFileStorage(unittest.TestCase):
+    """ Tests for the Base Class """
+
+    def setUp(self):
+        """ Move json file if it exists """
+        if os.path.isfile("file.json"):
+            os.rename("file.json", "file.json.temp")
+        self.brba = FileStorage()
+        self.my_model = BaseModel()
+
+    def tearDown(self):
+        """ Delete test json file and put original file back """
+        if os.path.isfile("file.json"):
+            os.remove("file.json")
+        if os.path.isfile("file.json.temp"):
+            os.rename("file.json.temp", "file.json")
+
+    def test_all(self):
+        """ type of dictionary """
+        my_user = User()
+        my_state = State()
+        my_city = City()
+        my_amenity = Amenity()
+        my_place = Place()
+        my_review = Review()
+        storage.reload()
+        self.assertEqual(type(self.brba.all()), dict)
+        self.assertTrue("BaseModel" in str(self.brba.all()))
+        self.assertTrue("User" in str(self.brba.all()))
+        self.assertTrue("State" in str(self.brba.all()))
+        self.assertTrue("City" in str(self.brba.all()))
+        self.assertTrue("Amenity" in str(self.brba.all()))
+        self.assertTrue("Place" in str(self.brba.all()))
+        self.assertTrue("Review" in str(self.brba.all()))
+
+    def test_new(self):
+        """ new method """
+        storage.reload()
+        self.brba.new(BaseModel())
+        self.assertTrue(self.brba.all())
+
+    def test_save(self):
+        """ json file check """
+        storage.reload()
+        self.brba.new(BaseModel())
+        self.brba.save()
+        self.assertTrue(os.path.isfile("file.json"))
+        self.assertTrue("BaseModel" in str(self.brba.all()))
 
 
-class FileStorageNewTest(unittest.TestCase):
-    __classes = {
-        'BaseModel': BaseModel, 'User': User, 'State': State, 'City': City,
-        'Amenity': Amenity, 'Place': Place, 'Review': Review
-    }
-
-    def testNewInstance(self):
-        """
-            new() function test
-        """
-        for classNameStr, className in self.__classes.items():
-            self.__newInstance(classNameStr, className)
-
-    def __newInstance(self, prmClassNameStr, prmClassName):
-        tmpDict = storage.all()
-        instance = prmClassName()
-        key = "{}.{}".format(prmClassNameStr, instance.id)
-        self.assertDictEqual(tmpDict, storage.all())
-        storage.new(instance)
-        tmpDict[key] = instance
-        self.assertDictEqual(tmpDict, storage.all())
-
-
-class FileStorageSaveTest(unittest.TestCase):
-    __classes = {
-        'BaseModel': BaseModel, 'User': User, 'State': State, 'City': City,
-        'Amenity': Amenity, 'Place': Place, 'Review': Review
-    }
-
-    def testSaveInstance(self):
-        """
-            save() function test
-        """
-        for classNameStr, className in self.__classes.items():
-            self.__saveInstance(classNameStr, className)
-
-    def __saveInstance(self, prmClassNameStr, prmClassName):
-        import json
-
-        tmpDict = {}
-        for key, value in storage.all().items():
-            tmpDict[key] = value.to_dict()
-        instance = prmClassName()
-        key = "{}.{}".format(prmClassNameStr, instance.id)
-        storage.new(instance)
-        storage.save()
-        tmpDict[key] = instance.to_dict()
-        inputStr = json.dumps(tmpDict)
-        with open("file.json", "r") as file:
-            output = file.read()
-        self.assertEqual(json.loads(inputStr), json.loads(output))
+    def test_reload_with_arg(self):
+        with self.assertRaises(TypeError):
+            models.storage.reload(None)
