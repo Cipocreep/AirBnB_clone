@@ -74,6 +74,19 @@ class TestConsoleFunction(unittest.TestCase):
                 res.append(str(val))
         return res
 
+    def test_show_obj(self):
+        """
+            <class name>.show(<id>)
+        """
+        for class_name in self.classes:
+            with patch('sys.stdout', new=StringIO()) as f:
+                obj = self.get_first_occurence_by_class_name(class_name)
+                if obj:
+                    HBNBCommand().onecmd("{}.show({})".format(
+                                                                class_name,
+                                                                obj.id))
+                    self.assertEqual(str(obj), f.getvalue()[:-1])
+
     def test_all_obj(self):
         """
             <class name>.all()
@@ -83,3 +96,63 @@ class TestConsoleFunction(unittest.TestCase):
                 all_class_name = self.get_all_obj_by_classname(class_name)
                 HBNBCommand().onecmd("{}.all()".format(class_name))
                 self.assertEqual(all_class_name, eval(f.getvalue()))
+
+    def test_destroy_obj(self):
+        """
+            <class name>.destroy(<id>)
+        for class_name in self.classes:
+            with patch('sys.stdout', new=StringIO()) as f:
+                obj = self.get_first_occurence_by_class_name(class_name)
+                if obj:
+                    HBNBCommand().onecmd("{}.
+                            destroy({})".format(class_name, obj.id))
+                    self.assertNotIn(obj, storage.all().values())
+        """
+
+    def test_update_obj(self):
+        """
+            <class name>.update(<id>, <attribute name>, <attribute value>)
+        """
+        tests = {"t_int": 120, "t_list": [
+                                        "id,1", "id,2"
+                                                    ],
+                                        "t_str": "this is str",
+                                        "t_float": 5.2}
+        for class_name in self.classes:
+            obj = self.get_first_occurence_by_class_name(class_name)
+            for key, val in tests.items():
+                with patch('sys.stdout', new=StringIO()) as f:
+                    if obj:
+                        HBNBCommand().onecmd(
+                            "{}.update(\"{}\", \"{}\", {})".format(
+                                                                class_name,
+                                                                obj.id,
+                                                                key,
+                                                                val
+                                                                    ))
+                        newval = getattr(obj, key)
+                        self.assertEqual(type(val), type(newval))
+                        self.assertEqual(val, newval)
+
+        tests = {
+                "number_rooms": 120,
+                "amenity_ids": ["id,1", "id,2"],
+                "description": "this is str",
+                "latitude": 5.2
+                }
+        obj = self.get_first_occurence_by_class_name("Place")
+        for key, val in tests.items():
+            with patch('sys.stdout', new=StringIO()) as f:
+                if obj:
+                    HBNBCommand().onecmd(
+                        "{}.update(\"{}\", \"{}\", {})".format(
+                                                                "Place",
+                                                                obj.id,
+                                                                key,
+                                                                val
+                                                                ))
+                    newval = getattr(obj, key)
+                    self.assertEqual(type(val), type(newval))
+                    self.assertEqual(val, newval)
+                    """
+                    """
