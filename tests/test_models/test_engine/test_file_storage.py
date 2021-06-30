@@ -14,10 +14,11 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from models.engine.file_storage import FileStorage
+from models import storage
 
 
-class TestFileStorage(unittest.TestCase):
-    '''testing file storage'''
+class TestForFileStorage(unittest.TestCase):
+    """ Test class for File"""
 
     @classmethod
     def setUpClass(cls):
@@ -85,10 +86,22 @@ class TestFileStorage(unittest.TestCase):
             os.remove("file.json")
         except Exception:
             pass
-        shutil.copy("./tests/test_models/test_engine/allin.txt", "./file.json")
+        shutil.copy("./tests/test_models/test_engine/dump.txt", "./file.json")
         with open("./file.json") as f:
             dicts = json.load(f)
         a_storage.reload()
         objs = a_storage.all()
         for key in dicts:
             self.assertEqual(objs[key].to_dict(), dicts[key])
+
+    def test_save(self):
+        """ json file check """
+        if os.path.isfile("file.json"):
+            os.rename("file.json", "file.json.temp")
+        self.brba = FileStorage()
+        self.my_model = BaseModel()
+        storage.reload()
+        self.brba.new(BaseModel())
+        self.brba.save()
+        self.assertTrue(os.path.isfile("file.json"))
+        self.assertTrue("BaseModel" in str(self.brba.all()))
