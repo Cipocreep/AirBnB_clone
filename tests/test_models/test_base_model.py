@@ -11,7 +11,7 @@ import inspect
 import time
 from datetime import datetime
 import models
-
+from models import storage
 
 class TestsForBase(unittest.TestCase):
     """ Tests for the Base Class """
@@ -24,6 +24,18 @@ class TestsForBase(unittest.TestCase):
         time_updated = instance.updated_at
         self.assertNotEqual(time_updated, time_created)
         self.assertGreater(time_updated, time_created)
+
+    def test_save_storage(self):
+        """ Tests the save method """
+        m1 = BaseModel()
+        m1.save()
+        with open("file.json", mode="r", encoding="UTF-8") as f:
+            d = json.load(f)
+        for item in d:
+            if m1.id in item:
+                d = d[item]
+        self.assertDictEqual(d, m1.to_dict())
+
 
     def test_to_dict(self):
         """ Testing to_dict """
