@@ -24,7 +24,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, arg):
         """ Quits the program when quit is called """
-        return True
+        raise SystemExit
 
     def do_EOF(self, arg):
         """ Quits the program when EOF is called """
@@ -182,10 +182,11 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split(".")
         func_name = ""
         func_id = ""
-        for index, char in enumerate(args[1]):
-            if char == "(":
-                func_name = args[1][0:index]
-                break
+        if len(args) > 1:
+            for index, char in enumerate(args[1]):
+                if char == "(":
+                    func_name = args[1][0:index]
+                    break
 
         if func_name in funcs:
             funcs[func_name](self, args[0])

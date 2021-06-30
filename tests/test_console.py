@@ -19,6 +19,7 @@ from models.place import Place
 from models.review import Review
 from models.user import User
 from models.engine.file_storage import FileStorage
+from os import system
 
 
 class TestConsole(unittest.TestCase):
@@ -578,9 +579,7 @@ EOF  all  create  destroy  help  quit  show  update
             HBNBCommand().onecmd("help")
             self.assertEqual(expected, f.getvalue())
 
-    def testQuit(self):
+    def test_quit(self):
+        """ testing quit """
         with self.assertRaises(SystemExit):
             HBNBCommand().onecmd("quit")
-
-if __name__ == '__main__':
-    unittest.main()
