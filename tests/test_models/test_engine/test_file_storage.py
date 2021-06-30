@@ -17,7 +17,7 @@ from models.city import City
 from models import storage
 import inspect
 import time
-import datetime
+from datetime import datetime
 import models
 from os import path
 
