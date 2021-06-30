@@ -6,10 +6,12 @@ from os import path
 from io import StringIO
 from unittest.mock import patch
 from console import HBNBCommand
+from models import storage
 
 
-class TestConsole(unittest.TestCase):
+class TestForConsole(unittest.TestCase):
     """ Test for the Console """
+    classes = ["User", "State", "Review", "Place", "City", "BaseModel"]
 
     def setUp(self):
         """ Setting up """
@@ -224,36 +226,22 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(f.getvalue().strip(), "")
 
     def test_all(self):
-        """ Testing all """
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("create User")
-
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("create State")
-
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("create City")
-
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("create Amenity")
-
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("create Place")
-
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("create Review")
-
+        """ testing all() """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("all")
-            self.assertTrue("[User]" in f.getvalue().strip())
-            self.assertTrue("[State]" in f.getvalue().strip())
-            self.assertTrue("[City]" in f.getvalue().strip())
-            self.assertTrue("[Amenity]" in f.getvalue().strip())
-            self.assertTrue("[Place]" in f.getvalue().strip())
-            self.assertTrue("[Review]" in f.getvalue().strip())
-            self.assertTrue("created_at" in f.getvalue().strip())
-            self.assertTrue("updated_at" in f.getvalue().strip())
-            self.assertTrue("id" in f.getvalue().strip())
+            res = []
+            for key, val in storage.all().items():
+                res.append(str(val))
+            self.assertEqual(eval(f.getvalue()), res)
+        for className in TestForConsole.classes:
+            with patch('sys.stdout', new=StringIO()) as f:
+                HBNBCommand().onecmd("all {}".format(className))
+                res = []
+                for key, val in storage.all().items():
+                    if val.__class__.__name__ == className:
+                        res.append(str(val))
+                self.assertEqual(eval(f.getvalue()), res)
+
 
     def test_update(self):
         """ Testing update """
