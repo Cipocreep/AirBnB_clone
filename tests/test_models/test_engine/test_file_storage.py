@@ -123,3 +123,15 @@ class TestsForFileStorage(unittest.TestCase):
         for key in dicts:
             self.assertEqual(objs[key].to_dict(), dicts[key])
 
+    def test_reload_fail(self):
+        """
+        Tests method: reload (reloads objects from string file)
+        """
+        a_storage = FileStorage()
+        with open("file.json", "w") as f:
+            f.write("{}")
+        with open("file.json", "r") as r:
+            for line in r:
+                self.assertEqual(line, "{}")
+        self.assertIs(a_storage.reload(), None)
+
