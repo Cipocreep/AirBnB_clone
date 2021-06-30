@@ -158,13 +158,12 @@ class TestConsole(unittest.TestCase):
                 HBNBCommand().onecmd('{}.show("{}")'.format(k, obj.id))
                 self.assertEqual(str(obj) + '\n', out.getvalue())
 
-    def test_update(self):
+    def test_update_BaseModel(self):
         """ Test BaseModel """
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create BaseModel")
             id = f.getvalue().strip()
             self.assertTrue(type(f), str)
-            self.assertEqual(len(id), 36)
 
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("BaseModel.update(\"" + str(id) + "\", \"name\", \"John\")")
@@ -174,6 +173,108 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("show BaseModel " + str(id))
             self.assertTrue("name" in f.getvalue().strip())
+            self.assertTrue("John" in f.getvalue().strip())
+
+    def test_update_User(self):
+        """ Test User Update """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("create User")
+            id = f.getvalue().strip()
+            self.assertTrue(type(f), str)
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("User.update(\"" + str(id) + "\", \"first_name\", \"John\")")
+            self.assertTrue(type(f), str)
+            self.assertEqual(f.getvalue().strip(), "")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("show User " + str(id))
+            self.assertTrue("first_name" in f.getvalue().strip())
+            self.assertTrue("John" in f.getvalue().strip())
+
+    def test_update_State(self):
+        """ Test State Update """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("create State")
+            id = f.getvalue().strip()
+            self.assertTrue(type(f), str)
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("State.update(\"" + str(id) + "\", \"name\", \"John\")")
+            self.assertTrue(type(f), str)
+            self.assertEqual(f.getvalue().strip(), "")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("show State " + str(id))
+            self.assertTrue("name" in f.getvalue().strip())
+            self.assertTrue("John" in f.getvalue().strip())
+
+    def test_update_City(self):
+        """ Test State Update """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("create City")
+            id = f.getvalue().strip()
+            self.assertTrue(type(f), str)
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("City.update(\"" + str(id) + "\", \"name\", \"John\")")
+            self.assertTrue(type(f), str)
+            self.assertEqual(f.getvalue().strip(), "")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("show City " + str(id))
+            self.assertTrue("name" in f.getvalue().strip())
+            self.assertTrue("John" in f.getvalue().strip())
+
+    def test_update_Amenity(self):
+        """ Test Anemity Update """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("create Amenity")
+            id = f.getvalue().strip()
+            self.assertTrue(type(f), str)
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("Amenity.update(\"" + str(id) + "\", \"name\", \"John\")")
+            self.assertTrue(type(f), str)
+            self.assertEqual(f.getvalue().strip(), "")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("show Amenity " + str(id))
+            self.assertTrue("name" in f.getvalue().strip())
+            self.assertTrue("John" in f.getvalue().strip())
+
+    def test_update_Place(self):
+        """ Test Place Update """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("create Place")
+            id = f.getvalue().strip()
+            self.assertTrue(type(f), str)
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("Place.update(\"" + str(id) + "\", \"name\", \"John\")")
+            self.assertTrue(type(f), str)
+            self.assertEqual(f.getvalue().strip(), "")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("show Place " + str(id))
+            self.assertTrue("name" in f.getvalue().strip())
+            self.assertTrue("John" in f.getvalue().strip())
+
+    def test_update_Review(self):
+        """ Test Review Update """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("create Review")
+            id = f.getvalue().strip()
+            self.assertTrue(type(f), str)
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("Review.update(\"" + str(id) + "\", \"text\", \"John\")")
+            self.assertTrue(type(f), str)
+            self.assertEqual(f.getvalue().strip(), "")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("show Review " + str(id))
+            self.assertTrue("text" in f.getvalue().strip())
             self.assertTrue("John" in f.getvalue().strip())
 
 
