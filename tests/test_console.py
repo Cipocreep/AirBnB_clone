@@ -167,7 +167,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(len(id), 36)
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("BaseModel.update('" + str(id) + "', 'name', 'John')")
+            HBNBCommand().onecmd("BaseModel.update(\"" + str(id) + "\", \"name\", \"John\")")
             self.assertTrue(type(f), str)
             self.assertEqual(f.getvalue().strip(), "")
 
