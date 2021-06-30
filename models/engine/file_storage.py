@@ -38,19 +38,20 @@ class FileStorage:
     def reload(self):
         """ Deserializes the JSON file to __objects """
         try:
-            from models.base_model import BaseModel
-            from models.user import User
-            from models.state import State
-            from models.city import City
-            from models.amenity import Amenity
-            from models.place import Place
-            from models.review import Review
-            with open(FileStorage.__file_path, 'r') as file:
-                for key, value in json.load(file).items():
-                    className = value['__class__']
-                    FileStorage.__objects[key] = eval(className)(**value)
-        except Exception:
-            pass
+            with open(FileStorage.__file_path, "r") as file:
+                read = file.read()
+                dict_file = {}
+                if read != "":
+                    dict_file = json.loads(read)
+
+                for key, value in dict_file.items():
+                    if key not in FileStorage.__objects.keys():
+                        class_name = value["__class__"]
+                        new = eval("{}(**value)".format(class_name))
+                        self.new(new)
+        except FileNotFoundError:
+            return
+
     @classmethod
     def get_object(cls, id=''):
         """ Test for getting object """
