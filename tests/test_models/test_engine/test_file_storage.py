@@ -116,6 +116,13 @@ class TestsForFileStorage(unittest.TestCase):
             self.assertIn("Amenity." + new_amenity.id, save_text)
             self.assertIn("Review." + new_review.id, save_text)
 
+        instance = BaseModel()
+        time_created = instance.updated_at
+        instance.save()
+        time_updated = instance.updated_at
+        self.assertNotEqual(time_updated, time_created)
+        self.assertGreater(time_updated, time_created)
+
     def test_reload(self):
         """ Testing reload() """
         if not path.exists("file.json"):
