@@ -77,16 +77,16 @@ class TestsForFileStorage(unittest.TestCase):
         key_city = new_city.__class__.__name__ + "." + new_city.__dict__["id"]
         key_user = new_user.__class__.__name__ + "." + new_user.__dict__["id"]
         key_review = new_review.__class__.__name__ + "." +\
-        new_review.__dict__["id"]
+            new_review.__dict__["id"]
 
         key_place = new_place.__class__.__name__ + "."\
-        + new_place.__dict__["id"]
+            + new_place.__dict__["id"]
 
         key_state = new_state.__class__.__name__ + "."\
-        + new_state.__dict__["id"]
+            + new_state.__dict__["id"]
 
         key_amenity = new_amenity.__class__.__name__ + "."\
-        + new_amenity.__dict__["id"]
+            + new_amenity.__dict__["id"]
 
         self.assertIn(key, objects)
         self.assertIn(key_city, objects)
