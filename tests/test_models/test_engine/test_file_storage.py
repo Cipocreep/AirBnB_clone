@@ -25,19 +25,29 @@ from os import path
 class TestsForFileStorage(unittest.TestCase):
     """ Tests for the Base Class """
 
-    def test_atr(self):
-        """ Tests for attributes """
+    def test_doc(self):
+        """ Testing for docstring """
+        self.assertIsNotNone(("models.engine.file_storage".__doc__))
+        self.assertIsNotNone(FileStorage.__doc__)
+        self.assertIsNotNone(FileStorage.__init__.__doc__)
+        self.assertIsNotNone(FileStorage.all.__doc__)
+        self.assertIsNotNone(FileStorage.new.__doc__)
+        self.assertIsNotNone(FileStorage.save.__doc__)
+        self.assertIsNotNone(FileStorage.reload.__doc__)
+
+    def test_attributes(self):
+        """ Testing for attributes """
         s1 = FileStorage()
         self.assertTrue(hasattr(s1, "_FileStorage__objects"))
         self.assertTrue(hasattr(s1, "_FileStorage__file_path"))
 
     def test_class(self):
-        """ Makes sure we're making the class """
+        """ Testing Class """
         s1 = FileStorage()
         self.assertTrue(type(s1), FileStorage)
 
-    def test_all_new(self):
-        """ Tests the functionality of new and all """
+    def test_new(self):
+        """ Testing new """
         setattr(storage, "_FileStorage__objects", dict())
         m1 = BaseModel()
         m2 = BaseModel()
@@ -47,11 +57,19 @@ class TestsForFileStorage(unittest.TestCase):
         thing = storage.all()
         self.assertDictEqual(thing, new_dict)
 
-    def test_save_reload(self):
-        """ Test save and reload """
+    def test_save(self):
+        """ Testing save and reload """
         os.remove('file.json')
         b1 = BaseModel()
         b1.save()
         storage.reload()
         new = storage.all()
         self.assertDictEqual(new["BaseModel." + b1.id].to_dict(), b1.to_dict())
+
+    def test_sleep(self):
+        """ Testing sleep """
+        o = BaseModel()
+        time.sleep(1)
+        n = datetime.datetime.now().replace(microsecond=0)
+        o.save()
+        self.assertEqual(o.updated_at.replace(microsecond=0), n)
