@@ -320,11 +320,6 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd(" ")
             self.assertEqual(f.getvalue().strip(), "")
 
-    def test_quit(self):
-        """ Testing quite command """
-        my_console = self.session()
-        assert HBNBCommand(my_console.onecmd("quit"))
-
     def testEOF(self):
         """ Testing EOF """
         my_console = self.session()
@@ -583,6 +578,9 @@ EOF  all  create  destroy  help  quit  show  update
             HBNBCommand().onecmd("help")
             self.assertEqual(expected, f.getvalue())
 
+    def testQuit(self):
+        with self.assertRaises(SystemExit):
+            HBNBCommand().onecmd("quit")
 
 if __name__ == '__main__':
     unittest.main()
