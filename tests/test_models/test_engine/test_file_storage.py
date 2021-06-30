@@ -25,16 +25,6 @@ from os import path
 class TestsForFileStorage(unittest.TestCase):
     """ Tests for the Base Class """
 
-    def test_doc(self):
-        """ Testing for docstring """
-        self.assertIsNotNone(("models.engine.file_storage".__doc__))
-        self.assertIsNotNone(FileStorage.__doc__)
-        self.assertIsNotNone(FileStorage.__init__.__doc__)
-        self.assertIsNotNone(FileStorage.all.__doc__)
-        self.assertIsNotNone(FileStorage.new.__doc__)
-        self.assertIsNotNone(FileStorage.save.__doc__)
-        self.assertIsNotNone(FileStorage.reload.__doc__)
-
     def test_atr(self):
         """ Tests for attributes """
         s1 = FileStorage()
@@ -65,14 +55,3 @@ class TestsForFileStorage(unittest.TestCase):
         storage.reload()
         new = storage.all()
         self.assertDictEqual(new["BaseModel." + b1.id].to_dict(), b1.to_dict())
-
-    def test_save_andrew_kali_suggestion(self):
-        """
-            test save using method provided by peer in Bog
-            not our own test
-        """
-        o = BaseModel()
-        time.sleep(1)
-        n = datetime.datetime.now().replace(microsecond=0)
-        o.save()
-        self.assertEqual(o.updated_at.replace(microsecond=0), n)
