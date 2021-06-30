@@ -127,3 +127,6 @@ class TestsForFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             objects = json.load(f)
         self.assertEqual(type(objects), dict)
+
+        with self.assertRaises(TypeError):
+            models.storage.reload(None)
