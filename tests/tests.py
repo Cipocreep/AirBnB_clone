@@ -10,6 +10,7 @@ from models.base_model import BaseModel
 import inspect
 import time
 from datetime import datetime
+import models
 
 
 class TestsForBase(unittest.TestCase):
@@ -23,6 +24,3 @@ class TestsForBase(unittest.TestCase):
         time_updated = instance.updated_at
         self.assertNotEqual(time_updated, time_created)
         self.assertGreater(time_updated, time_created)
-
-if __name__ == "__main__":
-    unittest.main()
