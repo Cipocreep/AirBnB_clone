@@ -23,3 +23,6 @@ class TestsForBase(unittest.TestCase):
         time_updated = instance.updated_at
         self.assertNotEqual(time_updated, time_created)
         self.assertGreater(time_updated, time_created)
+
+if __name__ == "__main__":
+    unittest.main()
