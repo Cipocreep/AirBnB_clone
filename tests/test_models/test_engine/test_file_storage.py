@@ -25,51 +25,58 @@ from os import path
 class TestsForFileStorage(unittest.TestCase):
     """ Tests for the Base Class """
 
-    def test_doc(self):
-        """ Testing for docstring """
-        self.assertIsNotNone(("models.engine.file_storage".__doc__))
-        self.assertIsNotNone(FileStorage.__doc__)
-        self.assertIsNotNone(FileStorage.__init__.__doc__)
-        self.assertIsNotNone(FileStorage.all.__doc__)
-        self.assertIsNotNone(FileStorage.new.__doc__)
-        self.assertIsNotNone(FileStorage.save.__doc__)
-        self.assertIsNotNone(FileStorage.reload.__doc__)
+    def setUp(self):
+        """ Move json file if it exists """
+        if os.path.isfile("file.json"):
+            os.rename("file.json", "file.json.temp")
+        self.brba = FileStorage()
+        self.my_model = BaseModel()
 
-    def test_attributes(self):
-        """ Testing for attributes """
-        s1 = FileStorage()
-        self.assertTrue(hasattr(s1, "_FileStorage__objects"))
-        self.assertTrue(hasattr(s1, "_FileStorage__file_path"))
+    def tearDown(self):
+        """ Delete test json file and put original file back """
+        if os.path.isfile("file.json"):
+            os.remove("file.json")
+        if os.path.isfile("file.json.temp"):
+            os.rename("file.json.temp", "file.json")
 
-    def test_class(self):
-        """ Testing Class """
-        s1 = FileStorage()
-        self.assertTrue(type(s1), FileStorage)
+    def test_all(self):
+        """ type of dictionary """
+        my_user = User()
+        my_state = State()
+        my_city = City()
+        my_amenity = Amenity()
+        my_place = Place()
+        my_review = Review()
+        storage.reload()
+        self.assertEqual(type(self.brba.all()), dict)
+        self.assertTrue("BaseModel" in str(self.brba.all()))
+        self.assertTrue("User" in str(self.brba.all()))
+        self.assertTrue("State" in str(self.brba.all()))
+        self.assertTrue("City" in str(self.brba.all()))
+        self.assertTrue("Amenity" in str(self.brba.all()))
+        self.assertTrue("Place" in str(self.brba.all()))
+        self.assertTrue("Review" in str(self.brba.all()))
 
     def test_new(self):
-        """ Testing new """
-        setattr(storage, "_FileStorage__objects", dict())
-        m1 = BaseModel()
-        m2 = BaseModel()
-        new_dict = dict()
-        new_dict["BaseModel." + m1.id] = m1
-        new_dict["BaseModel." + m2.id] = m2
-        thing = storage.all()
-        self.assertDictEqual(thing, new_dict)
+        """ new method """
+        storage.reload()
+        self.brba.new(BaseModel())
+        self.assertTrue(self.brba.all())
 
     def test_save(self):
-        """ Testing save and reload """
-        os.remove('file.json')
-        b1 = BaseModel()
-        b1.save()
+        """ json file check """
         storage.reload()
-        new = storage.all()
-        self.assertDictEqual(new["BaseModel." + b1.id].to_dict(), b1.to_dict())
+        self.brba.new(BaseModel())
+        self.brba.save()
+        self.assertTrue(os.path.isfile("file.json"))
+        self.assertTrue("BaseModel" in str(self.brba.all()))
 
-    def test_sleep(self):
-        """ Testing sleep """
-        o = BaseModel()
-        time.sleep(1)
-        n = datetime.datetime.now().replace(microsecond=0)
-        o.save()
-        self.assertEqual(o.updated_at.replace(microsecond=0), n)
+    def test_reload(self):
+        """ reload method """
+        storage.reload()
+        key = "BaseModel" + "." + self.my_model.id
+        self.brba.new(self.my_model)
+        self.brba.save()
+        self.brba.reload()
+        self.assertTrue(self.brba.all()[key])
+        self.assertTrue("BaseModel" in str(self.brba.all()))

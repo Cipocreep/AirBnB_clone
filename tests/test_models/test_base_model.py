@@ -37,7 +37,6 @@ class TestsForBase(unittest.TestCase):
                 d = d[item]
         self.assertDictEqual(d, m1.to_dict())
 
-
     def test_to_dict(self):
         """ Testing to_dict """
         instance = BaseModel()
