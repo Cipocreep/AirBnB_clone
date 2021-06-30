@@ -73,7 +73,7 @@ class TestsForFileStorage(unittest.TestCase):
 
     def test_reload(self):
         """ reload method """
-        storage.reload()
+        FileStorage.reload(self)
         key = "BaseModel" + "." + self.my_model.id
         self.brba.new(self.my_model)
         self.brba.save()
