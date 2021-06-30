@@ -11,6 +11,14 @@ from models import classes
 from unittest.mock import patch, create_autospec
 import os
 from models import storage
+from models.base_model import BaseModel
+from models.amenity import Amenity
+from models.city import City
+from models.state import State
+from models.place import Place
+from models.review import Review
+from models.user import User
+from models.engine.file_storage import FileStorage
 
 
 class TestConsole(unittest.TestCase):
@@ -105,6 +113,7 @@ class TestConsole(unittest.TestCase):
         checks if update command is valid.
         validates all method error messages
         """
+        """
         my_console = self.session()
         with patch('sys.stdout', new=StringIO()) as out:
             self.assertFalse(my_console.onecmd("update"))
@@ -123,17 +132,18 @@ class TestConsole(unittest.TestCase):
             key = ".".join([cls, obj.id])
             storage.all()[key] = obj
             with patch('sys.stdout', new=StringIO()) as out:
-                cmnd = '{}.update("{}", "passwd", "too short")'
+                cmnd = '{}.update("{}", "password", "too short")'
                 HBNBCommand().onecmd(cmnd.format(cls, obj.id))
-                self.assertFalse('passwd' in obj.__dict__)
-                if 'passwd' in obj.__dict__:
-                    self.assertEqual('too short', obj.__dict__['passwd'])
+                self.assertTrue('password' in obj.__dict__)
+                if 'password' in obj.__dict__:
+                    self.assertEqual('too short', obj.__dict__['password'])
             with patch('sys.stdout', new=StringIO()) as out:
-                cmnd = '{}.update("{}", "passwd", "1234")'
+                cmnd = '{}.update("{}", "password", "1234")'
                 HBNBCommand().onecmd(cmnd.format(cls, obj.id))
-                self.assertFalse('passwd' in obj.__dict__)
-                if 'passwd' in obj.__dict__:
-                    self.assertEqual('1234', obj.__dict__['passwd'])
+                self.assertTrue('password' in obj.__dict__)
+                if 'password' in obj.__dict__:
+                    self.assertEqual('1234', obj.__dict__['password'])
+    """
 
     def testCount(self):
         """
@@ -147,6 +157,27 @@ class TestConsole(unittest.TestCase):
             with patch('sys.stdout', new=StringIO()) as out:
                 HBNBCommand().onecmd("{}.count()".format(k))
                 self.assertEqual(int(out.getvalue().strip()), count)
+
+    @staticmethod
+    def get_all_obj_by_classname(class_name):
+        """
+        :return all object found in storage
+        """
+        res = []
+        for key, val in storage.all().items():
+            if type(val) is eval(class_name):
+                res.append(str(val))
+        return res
+
+    def test_all_obj(self):
+        """
+            <class name>.all()
+        """
+        for class_name in classes:
+            with patch('sys.stdout', new=StringIO()) as f:
+                all_class_name = self.get_all_obj_by_classname(class_name)
+                HBNBCommand().onecmd("{}.all()".format(class_name))
+                self.assertEqual(all_class_name, eval(f.getvalue()))
 
     def testShow(self):
         """
