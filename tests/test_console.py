@@ -26,7 +26,7 @@ class TestConsole(unittest.TestCase):
     test console code with unit testing
     """
 
-def setUp(self):
+    def setUp(self):
         """ Move json file if it exists """
         if os.path.isfile("file.json"):
             os.rename("file.json", "file.json.temp")
@@ -333,13 +333,6 @@ def setUp(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd(" ")
             self.assertEqual(f.getvalue().strip(), "")
-
-    def test_fake_command(self):
-        """ Test commands that do not exist """
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("garbage")
-            self.assertEqual(f.getvalue().strip(),
-                             "*** Unknown syntax: garbage")
 
 
 if __name__ == '__main__':
