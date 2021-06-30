@@ -13,11 +13,12 @@ from models.place import Place
 from models.state import State
 from models.review import Review
 from models.user import User
-from models.city import
+from models.city import City
 import inspect
 import time
 from datetime import datetime
 import models
+from os import path
 
 
 class TestsForFileStorage(unittest.TestCase):
@@ -64,17 +65,13 @@ class TestsForFileStorage(unittest.TestCase):
         key = new_base.__class__.__name__ + "." + new_base.__dict__["id"]
         key_city = new_city.__class__.__name__ + "." + new_city.__dict__["id"]
         key_user = new_user.__class__.__name__ + "." + new_user.__dict__["id"]
-        key_review = new_review.__class__.__name__ +
-        "." + new_review.__dict__["id"]
+        key_review = new_review.__class__.__name__ + "." + new_review.__dict__["id"]
 
-        key_place = new_place.__class__.__name__ +
-        "." + new_place.__dict__["id"]
+        key_place = new_place.__class__.__name__ + "." + new_place.__dict__["id"]
 
-        key_state = new_state.__class__.__name__ +
-        "." + new_state.__dict__["id"]
+        key_state = new_state.__class__.__name__ + "." + new_state.__dict__["id"]
 
-        key_amenity = new_amenity.__class__.__name__ +
-        "." + new_amenity.__dict__["id"]
+        key_amenity = new_amenity.__class__.__name__ + "." + new_amenity.__dict__["id"]
 
         self.assertIn(key, objects)
         self.assertIn(key_city, objects)
@@ -115,13 +112,6 @@ class TestsForFileStorage(unittest.TestCase):
             self.assertIn("City." + new_city.id, save_text)
             self.assertIn("Amenity." + new_amenity.id, save_text)
             self.assertIn("Review." + new_review.id, save_text)
-
-        instance = BaseModel()
-        time_created = instance.updated_at
-        instance.save()
-        time_updated = instance.updated_at
-        self.assertNotEqual(time_updated, time_created)
-        self.assertGreater(time_updated, time_created)
 
     def test_reload(self):
         """ Testing reload() """
