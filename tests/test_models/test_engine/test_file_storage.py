@@ -115,18 +115,11 @@ class TestsForFileStorage(unittest.TestCase):
 
     def test_reload(self):
         """ Testing reload() """
-        if not path.exists("file.json"):
-            new_file = FileStorage()
-            new_base = BaseModel(id="564778",
-                                 created_at="2021-07-02T22:46:38.849900",
-                                 updated_at="2021-07-02T22:46:38.849900")
-            new_city = City()
-            new_file.new(new_base)
-            new_file.new(new_city)
-            new_file.save()
-        with open("file.json", "r") as f:
-            objects = json.load(f)
-        self.assertEqual(type(objects), dict)
+        a_storage = FileStorage()
+        with open("file.json") as f:
+            dicts = json.load(f)
+        a_storage.reload()
+        objs = a_storage.all()
+        for key in dicts:
+            self.assertEqual(objs[key].to_dict(), dicts[key])
 
-        with self.assertRaises(TypeError):
-            models.storage.reload(None)
